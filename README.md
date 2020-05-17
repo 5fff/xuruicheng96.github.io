@@ -1,2 +1,2 @@
 # xuruicheng96.github.io
-My public website
+Public Site Hosted With Github Page
