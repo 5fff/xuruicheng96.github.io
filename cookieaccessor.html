@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Cookie Accessor</h2>
+
+<p>Logs</p>
+<textarea id="logs" rows="7" cols="60" ></textarea>
+
+</body>
+</html>
+
+<script>
+log("Accessor Initiated \n");
+window.onmessage = function(msg) {
+    //below condition protect against unauthorized access
+    // if (msg.origin !== "http://trusted-domain.com") {
+    //     return;
+    // }
+
+    var payload = JSON.parse(msg.data);
+    switch(payload.method) {
+        case 'set':
+            document.cookie = payload.data;
+            log("Cookie has been set \n");
+            break;
+        case 'get':
+            var parent = window.parent;
+            parent.postMessage(document.cookie, "*");
+            log("Cookie Accessed \n");
+            break;
+    }
+};
+
+function log(m) {
+  document.getElementById("logs").value += m;
+}
+
+
+</script>
