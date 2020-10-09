@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Cookie Tool</h2>
+
+<p>View Current Cookies</p>
+<input type="button" onClick = "getCookies()" value = "Get Cookies">
+<br>
+
+<textarea id="cookieView" rows="7" cols="60" ></textarea>
+
+<br><br>
+<p>Enter New Cookies Below</p>
+<textarea id="cookieInput" rows="2" cols="60"></textarea>
+<br>
+<input type="button" onClick = "setCookies()" value = "Set Cookies">
+
+
+</body>
+</html>
+
+<script>
+    
+function getCookies() {
+  document.getElementById("cookieView").value = document.cookie;
+}
+
+function setCookies() {
+  let newCookie = document.getElementById("cookieInput").value;
+  document.cookie = newCookie;
+  document.getElementById("cookieInput").value = document.cookie;
+}
+
+function processText() {
+  let textInput = document.getElementById("textInput").value;
+  let replaceTarget = document.getElementById("replaceTarget").value;
+  let replaceWith = document.getElementById("replaceWith").value;
+  let textOutput = textInput.replace(replaceTarget, replaceWith);
+  document.getElementById("textOutput").value = textOutput;
+}
+
+</script>
