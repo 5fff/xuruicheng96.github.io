@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Cross Domain Cookie Demo</h2>
+<p></p>
+<iframe id = "accessor" src="https://xuruicheng96.github.io/cookieaccessor" title="cookie accessor from other domain"></iframe> 
+
+
+<p>Cookies from other site</p>
+<input type="button" onClick = "getCookies()" value = "Get Cookies using accessor">
+<br>
+
+<textarea id="cookieView" rows="7" cols="60" ></textarea>
+
+<br><br>
+<p>Enter New Cookies Below</p>
+<textarea id="cookieInput" rows="2" cols="60"></textarea>
+<br>
+<input type="button" onClick = "setCookies()" value = "Set Cookies using accessor">
+
+
+</body>
+</html>
+
+<script>
+let cookieAccessor = document.getElementById("accessor").contentWindow;
+let cookieView = document.getElementById("cookieView");
+let cookieInput = document.getElementById("cookieInput")
+let receiveBuffer;
+window.onmessage = function(msg) {
+  receiveBuffer = msg.data;
+  cookieView.value = receiveBuffer;
+};
+
+function getCookies() {
+  cookieAccessor.postMessage(JSON.stringify({method: "get"}), "*");
+}
+
+function setCookies() {
+  cookieAccessor.postMessage(JSON.stringify({method: "set", data: cookieInput.value}), "*");
+}
+
+
+</script>
