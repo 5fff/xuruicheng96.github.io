@@ -3,6 +3,7 @@
 <body>
 
 <h2>Cookie Tool</h2>
+<h3 id = "hostname"></h3>
 
 <p>View Current Cookies</p>
 <input type="button" onClick = "getCookies()" value = "Get Cookies">
@@ -21,22 +22,23 @@
 </html>
 
 <script>
-    
-function getCookies() {
-  document.getElementById("cookieView").value = document.cookie;
-}
+  document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
+   
+  function getCookies() {
+    document.getElementById("cookieView").value = document.cookie;
+  }
 
-function setCookies() {
-  let newCookie = document.getElementById("cookieInput").value;
-  document.cookie = newCookie;
-}
+  function setCookies() {
+    let newCookie = document.getElementById("cookieInput").value;
+    document.cookie = newCookie;
+  }
 
-function processText() {
-  let textInput = document.getElementById("textInput").value;
-  let replaceTarget = document.getElementById("replaceTarget").value;
-  let replaceWith = document.getElementById("replaceWith").value;
-  let textOutput = textInput.replace(replaceTarget, replaceWith);
-  document.getElementById("textOutput").value = textOutput;
-}
+  function processText() {
+    let textInput = document.getElementById("textInput").value;
+    let replaceTarget = document.getElementById("replaceTarget").value;
+    let replaceWith = document.getElementById("replaceWith").value;
+    let textOutput = textInput.replace(replaceTarget, replaceWith);
+    document.getElementById("textOutput").value = textOutput;
+  }
 
 </script>
