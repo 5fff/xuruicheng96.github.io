@@ -6,13 +6,11 @@
 </head>
 <body>
 <h1 id = "hostname"></h1>
+<input type="button" onClick = "setCookie()" value = "Set a Test Cookie">
 
 </body>
 </html>
 <script type="text/javascript" src = "https://xuruicheng96.github.io/set_cookie.js"></script>
 <script type="text/javascript">
     document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
-    logMyDomain();
-    console.log("Hi");
-    console.log("Domain = " + window.location.hostname);
 </script>
