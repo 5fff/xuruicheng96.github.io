@@ -1,3 +1,3 @@
 function setCookie() {
-    document.cookie = "Test Cookie";
+    document.cookie = "test cookie=hello; Domain=www.x-r-c.com";
 }
