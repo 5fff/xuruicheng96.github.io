@@ -3,8 +3,7 @@ let iframeHostName = "www.x-r-c.com";
 let iframeURL = 'https://www.x-r-c.com/cookieaccessor';
 init();
 
-function init() {
-    var corsService = document.createElement('iframe');
+var corsService = document.createElement('iframe');
     corsService.setAttribute('src', iframeURL);
     var pendingResponses = new Map();
     var messageId = 0;
@@ -20,7 +19,6 @@ function init() {
         pendingResponses.get(payload.msgId).complete(payload.response);
         pendingResponses.delete(payload.msgId);
     };
-}
 
 //return an promise as pending response
 //Non blocking
