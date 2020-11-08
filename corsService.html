@@ -26,7 +26,7 @@ function requestHandeler(rawRequest) {
         return;
     }
     let msgPayload = JSON.parse(rawRequest.data);
-    let request = JSON.parse(msgPayload);
+    let request = JSON.parse(msgPayload.request);
     let response;
     switch(request.method) {
         case 'getCookie':
