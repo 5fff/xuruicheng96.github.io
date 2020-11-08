@@ -2,8 +2,10 @@
 let iframeHostName = "www.x-r-c.com";
 let iframeURL = 'https://www.x-r-c.com/cookieaccessor';
 
-let corsService = document.createElement('iframe').contentWindow;
-corsService.setAttribute('src', iframeURL);
+let corsServiceElement = document.createElement('iframe');
+corsServiceElement.setAttribute('src', iframeURL);
+corsServiceElement.setAttribute('id', 'corsServiceIframe');
+corsService = corsServiceElement.contentWindow;
 let pendingResponses = new Map();
 let messageId = 0;
 window.onmessage = function(msg) {
