@@ -7,6 +7,7 @@ corsServiceElement.setAttribute('src', iframeURL);
 corsServiceElement.setAttribute('id', 'corsServiceIframe');
 document.body.appendChild(corsServiceElement);
 corsService = corsServiceElement.contentWindow;
+corsServiceElement.style.display = "none";
 let pendingResponses = new Map();
 let messageId = 0;
 window.onmessage = function(msg) {

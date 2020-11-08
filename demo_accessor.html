@@ -17,23 +17,26 @@
 <p>Enter New Cookies Below</p>
 <textarea id="cookieInput" rows="2" cols="60"></textarea>
 <br>
-<input type="button" onClick = "setCookies()" value = "Set Cookies using accessor">
+<input type="button" onClick = "setCookies()" value = "Set Cookies using corsService">
 
-<br><br>
-<h3>Changing cookie from another domain using a JS function from that domain will not work</h3>
-<input type="button" onClick = "setCookie()" value = "Set a Test Cookie Using Foreign JS function">
 </body>
 </html>
+<!-- 
+  after including script below, the following functions are available:
+  getAllCookiesRaw()
+  getCookie(name)
+  setCookie(name, value)
+ -->
 <script type="text/javascript" src = "https://www.x-r-c.com/corsAccessor.js"></script>
-
 <script>
 document.getElementById("hostname").innerHTML = "host name = " + window.location.hostname + ":" + window.location.port;
 let cookieView = document.getElementById("cookieView");
 let cookieInput = document.getElementById("cookieInput")
 
 
-function getCookieUsingLib() {
-  getCookie
+async function getCookieUsingLib() {
+  let c = await getAllCookiesRaw();
+  cookieView.value = c;
 }
 
 function setCookieUsingLib() {
