@@ -1,6 +1,6 @@
 
 let iframeHostName = "www.x-r-c.com";
-let iframeURL = 'https://www.x-r-c.com/cookieaccessor';
+let iframeURL = 'https://www.x-r-c.com/corsService';
 
 let corsServiceElement = document.createElement('iframe');
 corsServiceElement.setAttribute('src', iframeURL);
