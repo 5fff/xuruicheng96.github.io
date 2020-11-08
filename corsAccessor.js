@@ -2,7 +2,7 @@
 let iframeHostName = "www.x-r-c.com";
 let iframeURL = 'https://www.x-r-c.com/cookieaccessor';
 
-let corsService = document.createElement('iframe');
+let corsService = document.createElement('iframe').contentWindow;
 corsService.setAttribute('src', iframeURL);
 let pendingResponses = new Map();
 let messageId = 0;
