@@ -25,7 +25,8 @@ function requestHandeler(rawRequest) {
         console.log("Blocked request from " + rawRequest.origin);
         return;
     }
-    let request = JSON.parse(rawRequest.data);
+    let msgPayload = JSON.parse(rawRequest.data);
+    let request = JSON.parse(msgPayload);
     let response;
     switch(request.method) {
         case 'getCookie':
@@ -41,7 +42,7 @@ function requestHandeler(rawRequest) {
         response = "ERROR: Invalid Request Method";
     }
     
-    messageParent(JSON.stringify({response: response, msgId: request.messageId}), "*");
+    messageParent(JSON.stringify({response: response, msgId: msgPayload.messageId}), "*");
 }
 
 function getCookie(name) {
