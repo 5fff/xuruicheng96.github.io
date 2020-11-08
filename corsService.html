@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Cookie Accessor</h2>
+<h3 id = "hostname"></h3>
+<textarea id="logs" rows="5" cols="32" ></textarea>
+
+</body>
+</html>
+
+<script>
+let verifyOrigin = true;
+let trustedHostName = "";
+document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
+
+log("Accessor Initiated \n");
+window.onmessage = function(request) {
+    requestHandeler(request);
+};
+
+function requestHandeler(rawRequest) {
+    //below condition protect against unauthorized access
+    if (verifyOrigin && rawRequest.origin !== trustedHostName) {
+        console.log("Blocked request from " + rawRequest.origin);
+        return;
+    }
+    let request = JSON.parse(rawRequest);
+    let response;
+    switch(request.method) {
+        case 'getCookie':
+            response = getCookie(request.name);
+            break;
+        case 'setCookie':
+            response = setCookie(request.name, request.value);
+            break;
+        case 'getAllCookiesRaw':
+            response = getAllCookiesRaw();
+            break;
+        default:
+        response = "ERROR: Invalid Request Method";
+    }
+    
+    messageParent(JSON.stringify({response: response, msgId: request.messageId}), "*");
+}
+
+function getCookie(name) {
+    let cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(name))
+        .split('=')[1];
+    return cookieValue;
+}
+
+function getAllCookiesRaw() {
+    return document.cookie;
+}
+
+function setCookie(name,value,days) {
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    return "success";
+}
+
+function messageParent(message) {
+    parent.postMessage(message, "*");
+}
+
+function log(m) {
+  document.getElementById("logs").value += m;
+}
+
+
+</script>

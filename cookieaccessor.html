@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<h2>Cookie Accessor</h2>
+<h2>CORS Accessor</h2>
 <h3 id = "hostname"></h3>
 <textarea id="logs" rows="5" cols="32" ></textarea>
 
@@ -10,14 +10,17 @@
 </html>
 
 <script>
+let verifyOrigin = false;
+let trustedHostName = "";
 document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
 
 log("Accessor Initiated \n");
 window.onmessage = function(msg) {
     //below condition protect against unauthorized access
-    // if (msg.origin !== "http://trusted-domain.com") {
-    //     return;
-    // }
+    if (verifyOrigin && msg.origin !== trustedHostName) {
+        console.log("Blocked request from " + msg.origin);
+        return;
+    }
 
     var payload = JSON.parse(msg.data);
     switch(payload.method) {
