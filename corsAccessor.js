@@ -14,11 +14,11 @@ window.onmessage = function(msg) {
         return;
     }
     let payload = JSON.parse(msg.data);
-    if(payload.msgId == undefined || !pendingResponses.has(payload.msgId)){
+    if(payload.messageId == undefined || !pendingResponses.has(payload.messageId)){
         return;
     }
-    pendingResponses.get(payload.msgId).complete(payload.response);
-    pendingResponses.delete(payload.msgId);
+    pendingResponses.get(payload.messageId).complete(payload.response);
+    pendingResponses.delete(payload.messageId);
 };
 
 //return an promise as pending response
@@ -36,7 +36,7 @@ function sendRequest(request) {
     reply.complete = tmpCompleteFn;
     reply.error = tmpErrorFn;
     pendingResponses.set(messageId++, reply); //must put in Map before post message
-    corsService.postMessage(JSON.stringify({request: request, msgId: messageId}), "*");
+    corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
     return reply; // a Promise
 }
 
