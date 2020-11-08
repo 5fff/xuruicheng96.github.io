@@ -17,7 +17,7 @@ document.getElementById("hostname").innerHTML = "This page's host name is: " + w
 log("Accessor Initiated \n");
 window.onmessage = function(msg) {
     //below condition protect against unauthorized access
-    if (verifyOrigin && msg.origin !== trustedHostName) {
+    if (verifyOrigin == true && msg.origin !== trustedHostName) {
         console.log("Blocked request from " + msg.origin);
         return;
     }

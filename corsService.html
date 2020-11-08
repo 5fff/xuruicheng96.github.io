@@ -10,7 +10,7 @@
 </html>
 
 <script>
-let verifyOrigin = true;
+let verifyOrigin = false;
 let trustedHostName = "";
 document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
 
@@ -25,7 +25,7 @@ function requestHandeler(rawRequest) {
         console.log("Blocked request from " + rawRequest.origin);
         return;
     }
-    let request = JSON.parse(rawRequest);
+    let request = JSON.parse(rawRequest.data);
     let response;
     switch(request.method) {
         case 'getCookie':
