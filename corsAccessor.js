@@ -35,8 +35,9 @@ function sendRequest(request) {
     //attaching it's complete() and fail() method on the out side
     reply.complete = tmpCompleteFn;
     reply.error = tmpErrorFn;
-    pendingResponses.set(messageId++, reply); //must put in Map before post message
+    pendingResponses.set(messageId, reply); //must put in Map before post message
     corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
+    messageId++;
     return reply; // a Promise
 }
 
