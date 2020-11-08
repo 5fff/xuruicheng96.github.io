@@ -42,7 +42,7 @@ function requestHandeler(rawRequest) {
         response = "ERROR: Invalid Request Method";
     }
     
-    messageParent(JSON.stringify({response: response, msgId: msgPayload.messageId}), "*");
+    messageParent(JSON.stringify({response: response, messageId: msgPayload.messageId}), "*");
 }
 
 function getCookie(name) {
