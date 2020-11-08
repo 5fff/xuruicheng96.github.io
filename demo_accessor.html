@@ -8,16 +8,19 @@
 <p></p>
 
 <p>Cookies from other site</p>
-<input type="button" onClick = "getCookieUsingLib()" value = "Get Cookies using accessor">
+<input type="button" onClick = "getCookieUsingLib()" value = "Get Cookies using corsService">
 <br>
 
 <textarea id="cookieView" rows="7" cols="60" ></textarea>
 
 <br><br>
-<p>Enter New Cookies Below</p>
-<textarea id="cookieInput" rows="2" cols="60"></textarea>
+<p>Enter New Cookie Name Below</p>
+<textarea id="newCookieName" rows="2" cols="60"></textarea>
 <br>
-<input type="button" onClick = "setCookies()" value = "Set Cookies using corsService">
+<p>Enter New Cookie Value Below</p>
+<textarea id="newCookieValue" rows="2" cols="60"></textarea>
+<br>
+<input type="button" onClick = "setCookieUsingLib()" value = "Set Cookies using corsService">
 
 </body>
 </html>
@@ -31,8 +34,8 @@
 <script>
 document.getElementById("hostname").innerHTML = "host name = " + window.location.hostname + ":" + window.location.port;
 let cookieView = document.getElementById("cookieView");
-let cookieInput = document.getElementById("cookieInput")
-
+let newCookieName = document.getElementById("newCookieName")
+let newCookieValue = document.getElementById("newCookieValue")
 
 async function getCookieUsingLib() {
   let c = await getAllCookiesRaw();
@@ -40,7 +43,9 @@ async function getCookieUsingLib() {
 }
 
 function setCookieUsingLib() {
-  cookieAccessor.postMessage(JSON.stringify({method: "set", data: cookieInput.value}), "*");
+  let name = newCookieName.value;
+  let value = newCookieValue.value;
+  setCookie(name, value);
 }
 
 
