@@ -95,7 +95,9 @@ crsCookieManager.updateCookie = function() {
         console.log("ERROR: Missing Attribute cookieData");
         return;
     }
-    this.cookieData.env = this.cookieData.env | defaultEnv;
+    if(!this.cookieData.env){
+        this.cookieData.env = defaultEnv;
+    }
     //use bracket notation to access object attribute as string
     let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
     for(iframeSrcUrl in iframeSrcUrlList) {
