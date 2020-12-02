@@ -12,11 +12,17 @@
 <script>
 let verifyOrigin = false;
 let trustedHostName = "";
-document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
+let fullDomain = window.location.hostname;
+document.getElementById("hostname").innerHTML = "This page's host name is: " + fullDomain + ":" + window.location.port;
 
 log("Accessor Initiated \n");
 window.onmessage = function(request) {
-    requestHandeler(request);
+    try {
+        requestHandeler(request);
+    } catch (err) {
+        console.log("ERROR: Request Handeling Error: " + err);
+        console.log("Iframe Src: " + fullDomain);
+    }
 };
 
 function requestHandeler(rawRequest) {
@@ -28,18 +34,28 @@ function requestHandeler(rawRequest) {
     let msgPayload = JSON.parse(rawRequest.data);
     let request = JSON.parse(msgPayload.request);
     let response;
-    switch(request.method) {
-        case 'getCookie':
-            response = getCookie(request.name);
-            break;
-        case 'setCookie':
-            response = setCookie(request.name, request.value);
-            break;
-        case 'getAllCookiesRaw':
-            response = getAllCookiesRaw();
-            break;
-        default:
-            response = "ERROR: Invalid Request Method";
+    try {
+        switch(request.method) {
+            case 'getCookie':
+                response = getCookie(request.name);
+                break;
+            case 'setCookie':
+                response = setCookie(request.name, request.value);
+                break;
+            case 'setMultipleCookies':
+                //cookiesArray is an array of objects which:
+                //has at least name and value
+                //and optional: exp
+                response = setMultipleCookies(request.cookiesArrayJSON);
+                break;
+            case 'getAllCookiesRaw':
+                response = getAllCookiesRaw();
+                break;
+            default:
+                response = "ERROR: Invalid Request Method";
+        }
+    } catch (err) {
+        response = "ERROR:" + err;
     }
     
     messageParent(JSON.stringify({response: response, messageId: msgPayload.messageId}), "*");
@@ -68,12 +84,36 @@ function setCookie(name,value,days) {
     return "success";
 }
 
+//Set multiple cookies
+//parameters: an array of obj
+//obj:  {name:"", val:"", expDays(optional, accept float type):"" }
+function setMultipleCookies(cookiesArrayJSON) {
+    //de-serialization
+    let cookiesArray = JSON.parse(cookiesArrayJSON);
+    
+    for(cookieObj in cookiesArray) {
+        let expires = "";
+        if (cookieObj.expDays) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = date.toUTCString();
+        }
+        document.cookie = 
+            name + "=" + (cookieObj.value || "") + ";" +
+            "expires=" + expires + ";" +
+            "domain=" + fullDomain + ";" +
+            "path=/; SameSite=None; Secure";
+    }
+    return "success";
+}
+
 function messageParent(message) {
     parent.postMessage(message, "*");
 }
 
 function log(m) {
   document.getElementById("logs").value += m;
+  console.log(m);
 }
 
 

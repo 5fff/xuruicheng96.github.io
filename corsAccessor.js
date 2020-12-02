@@ -2,14 +2,34 @@
 let iframeHostName = "https://www.x-r-c.com";
 let iframeURL = 'https://www.x-r-c.com/corsService';
 
+let defaultEnv = "POC";
+let envConfig = {
+    POC: [
+        "https://www.x-r-c.com/corsService",
+        "https://www.x-r-c.com/corsService"
+    ],
+    DIT: [
+        "https://",
+        "https://"
+    ]
+}
+
+//creating an iframe that we will later dynamically update source
 let corsServiceElement = document.createElement('iframe');
-corsServiceElement.setAttribute('src', iframeURL);
-corsServiceElement.setAttribute('id', 'corsServiceIframe');
-document.body.appendChild(corsServiceElement);
-corsService = corsServiceElement.contentWindow;
 corsServiceElement.style.display = "none";
+document.body.appendChild(corsServiceElement);
+let corsService = corsServiceElement.contentWindow;
+
+
+
+//pendingResponses keeps records for pending responses
+//one outgoing message corresponds to one incoming reponses, uniquely identified by messageId
 let pendingResponses = new Map();
+
+//unique message id counter
 let messageId = 0;
+
+//receiving messages from iframe
 window.onmessage = function(msg) {
     if (msg.origin !== iframeHostName) {
         return;
@@ -63,4 +83,29 @@ function setCookie(name, value) {
     return sendRequest(request);
 }
 
+function setMultipleCookies(cookiesArray) {
+    let request = JSON.stringify({method: "setCookie", cookiesArrayJSON: JSON.stringify(cookiesArray)});
+    return sendRequest(request);
+}
+
 // 
+let crsCookieManager = {};
+crsCookieManager.updateCookie = function() {
+    if(!crsCookieManager.cookieData) {
+        console.log("ERROR: Missing Attribute cookieData");
+        return;
+    }
+    this.cookieData.env = crsCookieManager.cookieData.env | defaultEnv;
+    //use bracket notation to access object attribute as string
+    let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
+    for(iframeSrcUrl in iframeSrcUrlList) {
+        //iterate through each iframe src, set source and send message
+        corsServiceElement.setAttribute('src', iframeSrcUrl);
+        //corsService should alway pointing to the current iframe , no need to re-assign
+
+        setMultipleCookies(this.cookieData.cookies);
+
+
+    }
+}
+
