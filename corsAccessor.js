@@ -90,6 +90,7 @@ function setMultipleCookies(cookiesArray) {
 
 // 
 let crsCookieManager = {};
+//this function returns a promise
 crsCookieManager.updateCookie = async function() {
     if(!crsCookieManager.cookieData) {
         console.log("ERROR: Missing Attribute cookieData");
@@ -108,7 +109,7 @@ crsCookieManager.updateCookie = async function() {
         //must wait for request finish before changing iframe
         await setMultipleCookies(this.cookieData.cookies);
 
-
+        return "success";
     }
 }
 
