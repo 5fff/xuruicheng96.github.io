@@ -98,7 +98,7 @@ function setMultipleCookies(cookiesArrayJSON) {
             date.setTime(date.getTime() + (days*24*60*60*1000));
             expires = date.toUTCString();
         }
-        let tempCookieString = name + "=" + (cookieObj.value || "") + ";" +
+        let tempCookieString = cookieObj.name + "=" + (cookieObj.value || "") + ";" +
             "expires=" + expires + ";" +
             "domain=" + fullDomain + ";" +
             "path=/; SameSite=None; Secure";
