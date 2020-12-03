@@ -100,7 +100,7 @@ crsCookieManager.updateCookie = function() {
     }
     //use bracket notation to access object attribute as string
     let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
-    for(iframeSrcUrl in iframeSrcUrlList) {
+    for(iframeSrcUrl of iframeSrcUrlList) {
         //iterate through each iframe src, set source and send message
         corsServiceElement.setAttribute('src', iframeSrcUrl);
         //corsService should alway pointing to the current iframe , no need to re-assign
