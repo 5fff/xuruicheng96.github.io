@@ -91,7 +91,7 @@ function setMultipleCookies(cookiesArrayJSON) {
     //de-serialization
     let cookiesArray = JSON.parse(cookiesArrayJSON);
     
-    for(cookieObj in cookiesArray) {
+    for(cookieObj of cookiesArray) {
         let expires = "";
         if (cookieObj.expDays) {
             let date = new Date();
