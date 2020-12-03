@@ -84,7 +84,7 @@ function setCookie(name, value) {
 }
 
 function setMultipleCookies(cookiesArray) {
-    let request = JSON.stringify({method: "setCookie", cookiesArrayJSON: JSON.stringify(cookiesArray)});
+    let request = JSON.stringify({method: "setMultipleCookies", cookiesArrayJSON: JSON.stringify(cookiesArray)});
     return sendRequest(request);
 }
 
