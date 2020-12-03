@@ -90,7 +90,7 @@ function setMultipleCookies(cookiesArray) {
 
 // 
 let crsCookieManager = {};
-crsCookieManager.updateCookie = function() {
+crsCookieManager.updateCookie = async function() {
     if(!crsCookieManager.cookieData) {
         console.log("ERROR: Missing Attribute cookieData");
         return;
@@ -105,7 +105,8 @@ crsCookieManager.updateCookie = function() {
         corsServiceElement.setAttribute('src', iframeSrcUrl);
         //corsService should alway pointing to the current iframe , no need to re-assign
 
-        setMultipleCookies(this.cookieData.cookies);
+        //must wait for request finish before changing iframe
+        await setMultipleCookies(this.cookieData.cookies);
 
 
     }
