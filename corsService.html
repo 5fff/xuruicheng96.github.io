@@ -58,7 +58,7 @@ function requestHandeler(rawRequest) {
         response = "ERROR:" + err;
     }
     
-    messageParent(JSON.stringify({response: response, messageId: msgPayload.messageId}), "*");
+    messageParent(JSON.stringify({response: response, messageId: msgPayload.messageId}));
 }
 
 function getCookie(name) {
