@@ -16,7 +16,7 @@ let envConfig = {
 
 //creating an iframe that we will later dynamically update source
 let corsServiceElement = document.createElement('iframe');
-corsServiceElement.style.display = "none";
+// corsServiceElement.style.display = "none";
 document.body.appendChild(corsServiceElement);
 let corsService = corsServiceElement.contentWindow;
 
