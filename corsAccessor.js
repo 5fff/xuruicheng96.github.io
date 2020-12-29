@@ -54,6 +54,7 @@ function sendRequest(corsService, request) {
     let thisMessageId = messageId;
     messageId++;
     corsService.addEventListener("load", function() {
+        console.log("iframe loaded, sending request");
         corsService.postMessage(JSON.stringify({request: request, messageId: thisMessageId}), "*");
     });
 
