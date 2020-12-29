@@ -49,15 +49,8 @@ function sendRequest(corsService, request) {
     reply.complete = tmpCompleteFn;
     reply.error = tmpErrorFn;
     pendingResponses.set(messageId, reply); //must put in Map before post message
-
-    // corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
-    while(corsService.readyState != 'complete'){}
-    
-    console.log("iframe loaded, sending request");
     corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
-
     messageId++;
-
     return reply; // a Promise
 }
 
@@ -87,12 +80,26 @@ function setMultipleCookies(corsService, cookiesArray) {
     return sendRequest(corsService, request);
 }
 
-function createAccessor(targetSrc) {
+async function createAccessor(targetSrc) {
+    //creat a dummy promise
+    let pendingAccessor = new Promise(
+        (completeFn, errorFn) => {
+            tmpCompleteFn = completeFn;
+            tmpErrorFn = errorFn;
+        }
+    );
+    //attaching it's complete() and fail() method on the out side
+    pendingAccessor.complete = tmpCompleteFn;
+    pendingAccessor.error = tmpErrorFn;
+
     let corsServiceElement = document.createElement('iframe');
     // corsServiceElement.style.display = "none";
     document.body.appendChild(corsServiceElement);
-    corsServiceElement.setAttribute('src', iframeSrcUrl);
     let corsService = corsServiceElement.contentWindow;
+    corsService.document.addEventListener("load", function() {
+        pendingAccessor.complete(corsService);
+    })
+    corsServiceElement.setAttribute('src', iframeSrcUrl);
     return corsService;
 }
 // 
@@ -109,7 +116,7 @@ crsCookieManager.updateCookie = async function() {
     //use bracket notation to access object attribute as string
     let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
     for(iframeSrcUrl of iframeSrcUrlList) {
-        let corsService = createAccessor(iframeSrcUrl);
+        let corsService = await createAccessor(iframeSrcUrl);
         //must wait for request finish before changing iframe
         await setMultipleCookies(corsService, this.cookieData.cookies);
     }
