@@ -26,6 +26,7 @@ window.onmessage = function(request) {
 };
 
 function requestHandeler(rawRequest) {
+    console.log("recieved a request from " + rawRequest.origin);
     //below condition protect against unauthorized access
     if (verifyOrigin && rawRequest.origin !== trustedHostName) {
         console.log("Blocked request from " + rawRequest.origin);
