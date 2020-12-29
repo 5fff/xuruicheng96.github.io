@@ -37,7 +37,7 @@ window.onmessage = function(msg) {
 //return an promise as pending response
 //Non blocking
 //parameter: req, a string
-function sendRequest(request, corsService) {
+function sendRequest(corsService, request) {
     let tmpCompleteFn, tmpErrorFn;
     let reply = new Promise(
         (completeFn, errorFn) => {
