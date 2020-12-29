@@ -14,11 +14,6 @@ let envConfig = {
     ]
 }
 
-//creating an iframe that we will later dynamically update source
-let corsServiceElement;
-let corsService;
-
-
 //pendingResponses keeps records for pending responses
 //one outgoing message corresponds to one incoming reponses, uniquely identified by messageId
 let pendingResponses = new Map();
@@ -42,7 +37,7 @@ window.onmessage = function(msg) {
 //return an promise as pending response
 //Non blocking
 //parameter: req, a string
-function sendRequest(request) {
+function sendRequest(request, corsService) {
     let tmpCompleteFn, tmpErrorFn;
     let reply = new Promise(
         (completeFn, errorFn) => {
@@ -65,26 +60,34 @@ function sendRequest(request) {
 //parameters: none
 //return: all cookies as a raw string
 //detail: this function will use sendMessage and add a type
-function getAllCookiesRaw() {
-    let request = JSON.stringify({method: "getAllCookiesRaw"});
-    return sendRequest(request);
-}
+// function getAllCookiesRaw() {
+//     let request = JSON.stringify({method: "getAllCookiesRaw"});
+//     return sendRequest(request);
+// }
 
-function getCookie(name) {
-    let request = JSON.stringify({method: "getCookie", name: name});
-    return sendRequest(request);
-}
+// function getCookie(name) {
+//     let request = JSON.stringify({method: "getCookie", name: name});
+//     return sendRequest(request);
+// }
 
-function setCookie(name, value) {
-    let request = JSON.stringify({method: "setCookie", name: name, value: value});
-    return sendRequest(request);
-}
+// function setCookie(name, value) {
+//     let request = JSON.stringify({method: "setCookie", name: name, value: value});
+//     return sendRequest(request);
+// }
 
-function setMultipleCookies(cookiesArray) {
+function setMultipleCookies(corsService, cookiesArray) {
     let request = JSON.stringify({method: "setMultipleCookies", cookiesArrayJSON: JSON.stringify(cookiesArray)});
-    return sendRequest(request);
+    return sendRequest(corsService, request);
 }
 
+function createAccessor(targetSrc) {
+    let corsServiceElement = document.createElement('iframe');
+    // corsServiceElement.style.display = "none";
+    document.body.appendChild(corsServiceElement);
+    corsServiceElement.setAttribute('src', iframeSrcUrl);
+    let corsService = corsServiceElement.contentWindow;
+    return corsService;
+}
 // 
 let crsCookieManager = {};
 //this function returns a promise
@@ -98,17 +101,10 @@ crsCookieManager.updateCookie = async function() {
     }
     //use bracket notation to access object attribute as string
     let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
-    for(iframeSrcUrl of iframeSrcUrlList) {
-        corsServiceElement = document.createElement('iframe');
-        // corsServiceElement.style.display = "none";
-        document.body.appendChild(corsServiceElement);
-        corsService = corsServiceElement.contentWindow;
-        //iterate through each iframe src, set source and send message
-        corsServiceElement.setAttribute('src', iframeSrcUrl);
-        //corsService should alway pointing to the current iframe , no need to re-assign
-
+    for(iframeSrcUrl of iframeSrcUrlList) {s
+        let corsService = createAccessor(iframeSrcUrl);
         //must wait for request finish before changing iframe
-        await setMultipleCookies(this.cookieData.cookies);
+        await setMultipleCookies(corsService, this.cookieData.cookies);
 
         return "success";
     }
