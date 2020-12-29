@@ -51,12 +51,12 @@ function sendRequest(corsService, request) {
     pendingResponses.set(messageId, reply); //must put in Map before post message
 
     // corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
-    let thisMessageId = messageId;
+    while(corsService.readyState != 'complete'){}
+    
+    console.log("iframe loaded, sending request");
+    corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
+
     messageId++;
-    corsService.addEventListener("load", function() {
-        console.log("iframe loaded, sending request");
-        corsService.postMessage(JSON.stringify({request: request, messageId: thisMessageId}), "*");
-    });
 
     return reply; // a Promise
 }

@@ -16,6 +16,7 @@ let fullDomain = window.location.hostname;
 document.getElementById("hostname").innerHTML = "This page's host name is: " + fullDomain + ":" + window.location.port;
 
 log("Accessor Initiated \n");
+console.log("Accessor Initiated \n");
 window.onmessage = function(request) {
     try {
         requestHandeler(request);
