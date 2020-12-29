@@ -101,12 +101,11 @@ crsCookieManager.updateCookie = async function() {
     }
     //use bracket notation to access object attribute as string
     let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
-    for(iframeSrcUrl of iframeSrcUrlList) {s
+    for(iframeSrcUrl of iframeSrcUrlList) {
         let corsService = createAccessor(iframeSrcUrl);
         //must wait for request finish before changing iframe
         await setMultipleCookies(corsService, this.cookieData.cookies);
-
-        return "success";
     }
+    return "success";
 }
 
