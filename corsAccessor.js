@@ -49,8 +49,14 @@ function sendRequest(corsService, request) {
     reply.complete = tmpCompleteFn;
     reply.error = tmpErrorFn;
     pendingResponses.set(messageId, reply); //must put in Map before post message
-    corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
+
+    // corsService.postMessage(JSON.stringify({request: request, messageId: messageId}), "*");
+    let thisMessageId = messageId;
     messageId++;
+    corsService.addEventListener("load", function() {
+        corsService.postMessage(JSON.stringify({request: request, messageId: thisMessageId}), "*");
+    });
+
     return reply; // a Promise
 }
 
