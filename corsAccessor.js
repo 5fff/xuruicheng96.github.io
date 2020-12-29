@@ -97,6 +97,7 @@ async function createAccessor(targetSrc) {
     document.body.appendChild(corsServiceElement);
     let corsService = corsServiceElement.contentWindow;
     corsService.document.addEventListener("load", function() {
+        console.log("corsService loaded, returning");
         pendingAccessor.complete(corsService);
     })
     corsServiceElement.setAttribute('src', iframeSrcUrl);
