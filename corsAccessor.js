@@ -15,11 +15,8 @@ let envConfig = {
 }
 
 //creating an iframe that we will later dynamically update source
-let corsServiceElement = document.createElement('iframe');
-// corsServiceElement.style.display = "none";
-document.body.appendChild(corsServiceElement);
-let corsService = corsServiceElement.contentWindow;
-
+let corsServiceElement;
+let corsService;
 
 
 //pendingResponses keeps records for pending responses
@@ -102,6 +99,10 @@ crsCookieManager.updateCookie = async function() {
     //use bracket notation to access object attribute as string
     let iframeSrcUrlList = envConfig[crsCookieManager.cookieData.env];
     for(iframeSrcUrl of iframeSrcUrlList) {
+        corsServiceElement = document.createElement('iframe');
+        // corsServiceElement.style.display = "none";
+        document.body.appendChild(corsServiceElement);
+        corsService = corsServiceElement.contentWindow;
         //iterate through each iframe src, set source and send message
         corsServiceElement.setAttribute('src', iframeSrcUrl);
         //corsService should alway pointing to the current iframe , no need to re-assign
