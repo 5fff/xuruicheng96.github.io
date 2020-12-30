@@ -117,7 +117,7 @@ function log(m) {
 }
 
 function sendLoadEvent() {
-    messageParent(JSON.stringify({event: corsServiceLoad}));
+    messageParent(JSON.stringify({event: "corsServiceLoad"}));
 }
 
 window.onload = function() {
