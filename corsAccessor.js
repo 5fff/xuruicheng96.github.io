@@ -118,8 +118,9 @@ async function createAccessor(targetSrc) {
     //create wrapper object and later put inside promise, wich methods to destroy the iframe
     let corsService = {};
     corsService.iframeElement = corsServiceElement;
-    corsService.postMessage = function() {
-        this.iframeElement.contentWindow.postMessage.apply(corsServiceElement.contentWindow, arguments);
+    corsService.postMessage = function(a,b) {
+        // this.iframeElement.contentWindow.postMessage.apply(corsServiceElement.contentWindow, arguments);
+        this.iframeElement.contentWindow.postMessage(a,b);
     }
     corsService.destroy = function() {
         this.iframeElement.remove();
