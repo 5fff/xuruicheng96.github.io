@@ -110,12 +110,16 @@ async function createAccessor(targetSrc) {
     //attaching it's complete() and fail() method on the out side
     tempPendingAccessor.complete = tmpCompleteFn;
     tempPendingAccessor.error = tmpErrorFn;  
-
+    
     let corsServiceElement = document.createElement('iframe');
     // corsServiceElement.style.display = "none";
     document.body.appendChild(corsServiceElement);
     tempPendingAccessor.corsService = corsServiceElement.contentWindow;
     corsServiceElement.setAttribute('src', iframeSrcUrl);
+
+    tempPendingAccessor.destroy = function () {
+        corsServiceElement.remove();
+    }
     pendingAccessor = tempPendingAccessor;
     return pendingAccessor;
 }
@@ -136,6 +140,7 @@ crsCookieManager.updateCookie = async function() {
         let corsService = await createAccessor(iframeSrcUrl);
         //must wait for request finish before changing iframe
         await setMultipleCookies(corsService, this.cookieData.cookies);
+        corsService.destroy();
     }
     return "success";
 }
