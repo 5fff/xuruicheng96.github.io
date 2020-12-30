@@ -44,7 +44,7 @@ let pendingAccessor;
 window.addEventListener("corsServiceLoad", function() {
     console.log("corsService loaded, releasing corsService");
     try {
-        pendingAccessor.complete(corsService); // release corsService after recieving signal
+        pendingAccessor.complete(pendingAccessor.corsService); // release corsService after recieving signal
         pendingAccessor = null; //clear the pending promise
     } catch (e) {
         console.log("error when releaseing corsService after load");
@@ -109,15 +109,15 @@ async function createAccessor(targetSrc) {
     );
     //attaching it's complete() and fail() method on the out side
     tempPendingAccessor.complete = tmpCompleteFn;
-    tempPendingAccessor.error = tmpErrorFn;
-    pendingAccessor = tempPendingAccessor;
+    tempPendingAccessor.error = tmpErrorFn;  
 
     let corsServiceElement = document.createElement('iframe');
     // corsServiceElement.style.display = "none";
     document.body.appendChild(corsServiceElement);
-    let corsService = corsServiceElement.contentWindow;
+    tempPendingAccessor.corsService = corsServiceElement.contentWindow;
     corsServiceElement.setAttribute('src', iframeSrcUrl);
-    return corsService;
+    pendingAccessor = tempPendingAccessor;
+    return pendingAccessor;
 }
 // 
 let crsCookieManager = {};
