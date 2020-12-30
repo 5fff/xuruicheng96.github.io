@@ -110,16 +110,23 @@ async function createAccessor(targetSrc) {
     //attaching it's complete() and fail() method on the out side
     tempPendingAccessor.complete = tmpCompleteFn;
     tempPendingAccessor.error = tmpErrorFn;  
-    
+
     let corsServiceElement = document.createElement('iframe');
     // corsServiceElement.style.display = "none";
     document.body.appendChild(corsServiceElement);
-    tempPendingAccessor.corsService = corsServiceElement.contentWindow;
-    corsServiceElement.setAttribute('src', iframeSrcUrl);
 
-    tempPendingAccessor.corsService.destroy = function () {
-        corsServiceElement.remove();
+    //create wrapper object and later put inside promise, wich methods to destroy the iframe
+    let corsService = {};
+    corsService.iframeElement = corsServiceElement;
+    corsService.postMessage = function() {
+        this.iframeElement.contentWindow.postMessage.apply(null, arguments);
     }
+    corsService.destroy = function() {
+        this.iframeElement.remove();
+    }
+
+    tempPendingAccessor.corsService = corsService;
+    corsServiceElement.setAttribute('src', iframeSrcUrl);
     pendingAccessor = tempPendingAccessor;
     return pendingAccessor;
 }
