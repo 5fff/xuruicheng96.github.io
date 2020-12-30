@@ -117,7 +117,7 @@ async function createAccessor(targetSrc) {
     tempPendingAccessor.corsService = corsServiceElement.contentWindow;
     corsServiceElement.setAttribute('src', iframeSrcUrl);
 
-    tempPendingAccessor.destroy = function () {
+    tempPendingAccessor.corsService.destroy = function () {
         corsServiceElement.remove();
     }
     pendingAccessor = tempPendingAccessor;
@@ -140,7 +140,7 @@ crsCookieManager.updateCookie = async function() {
         let corsService = await createAccessor(iframeSrcUrl);
         //must wait for request finish before changing iframe
         await setMultipleCookies(corsService, this.cookieData.cookies);
-        corsService.destroy();
+        corsService.destroy()
     }
     return "success";
 }
