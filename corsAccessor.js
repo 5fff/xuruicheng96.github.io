@@ -27,12 +27,28 @@ window.onmessage = function(msg) {
         return;
     }
     let payload = JSON.parse(msg.data);
+    if(payload.event && payload.event == corsServiceLoad) {
+        let corsServiceLoadEvent = new Event("corsServiceLoad", {bubbles: true});
+        window.dispatchEvent(corsServiceLoadEvent);
+    }
+
     if(payload.messageId == undefined || !pendingResponses.has(payload.messageId)){
         return;
     }
     pendingResponses.get(payload.messageId).complete(payload.response);
     pendingResponses.delete(payload.messageId);
 };
+
+
+let pendingAccessor;
+window.document.addEventListener("corsServiceLoad", function() {
+    console.log("corsService loaded, releasing corsService");
+    try {
+        pendingAccessor.complete(corsService); // release corsService after recieving signal
+    } catch (e) {
+        console.log("error when releaseing corsService after load");
+    }
+})
 
 //return an promise as pending response
 //Non blocking
@@ -80,26 +96,25 @@ function setMultipleCookies(corsService, cookiesArray) {
     return sendRequest(corsService, request);
 }
 
+
+
 async function createAccessor(targetSrc) {
     //creat a dummy promise
-    let pendingAccessor = new Promise(
+    let tempPendingAccessor = new Promise(
         (completeFn, errorFn) => {
             tmpCompleteFn = completeFn;
             tmpErrorFn = errorFn;
         }
     );
     //attaching it's complete() and fail() method on the out side
-    pendingAccessor.complete = tmpCompleteFn;
-    pendingAccessor.error = tmpErrorFn;
+    tempPendingAccessor.complete = tmpCompleteFn;
+    tempPendingAccessor.error = tmpErrorFn;
+    pendingAccessor = tempPendingAccessor;
 
     let corsServiceElement = document.createElement('iframe');
     // corsServiceElement.style.display = "none";
     document.body.appendChild(corsServiceElement);
     let corsService = corsServiceElement.contentWindow;
-    corsService.document.addEventListener("load", function() {
-        console.log("corsService loaded, returning");
-        pendingAccessor.complete(corsService);
-    })
     corsServiceElement.setAttribute('src', iframeSrcUrl);
     return corsService;
 }
