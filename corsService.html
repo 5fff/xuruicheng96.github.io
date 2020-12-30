@@ -6,9 +6,6 @@
 <h3 id = "hostname"></h3>
 <textarea id="logs" rows="5" cols="32" ></textarea>
 
-</body>
-</html>
-
 <script>
 let verifyOrigin = false;
 let trustedHostName = "";
@@ -119,5 +116,14 @@ function log(m) {
   console.log(m);
 }
 
+function sendLoadEvent() {
+    messageParent(JSON.stringify({response: response, event: corsServiceLoad}));
+}
 
+window.onload = function() {
+    sendLoadEvent();
+};
 </script>
+</body>
+</html>
+

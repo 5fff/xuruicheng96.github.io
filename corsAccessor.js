@@ -45,6 +45,7 @@ window.document.addEventListener("corsServiceLoad", function() {
     console.log("corsService loaded, releasing corsService");
     try {
         pendingAccessor.complete(corsService); // release corsService after recieving signal
+        pendingAccessor = null; //clear the pending promise
     } catch (e) {
         console.log("error when releaseing corsService after load");
     }
