@@ -41,7 +41,7 @@ window.onmessage = function(msg) {
 
 
 let pendingAccessor;
-window.document.addEventListener("corsServiceLoad", function() {
+window.addEventListener("corsServiceLoad", function() {
     console.log("corsService loaded, releasing corsService");
     try {
         pendingAccessor.complete(corsService); // release corsService after recieving signal
