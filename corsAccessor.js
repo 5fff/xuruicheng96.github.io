@@ -119,8 +119,8 @@ async function createAccessor(targetSrc) {
     let corsService = {};
     corsService.iframeElement = corsServiceElement;
     corsService.postMessage = function(a,b) {
-        // this.iframeElement.contentWindow.postMessage.apply(corsServiceElement.contentWindow, arguments);
-        this.iframeElement.contentWindow.postMessage(a,b);
+        this.iframeElement.contentWindow.postMessage.apply(corsServiceElement.contentWindow, arguments);
+        // this.iframeElement.contentWindow.postMessage(a,b);
     }
     corsService.destroy = function() {
         this.iframeElement.remove();
