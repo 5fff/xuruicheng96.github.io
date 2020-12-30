@@ -27,7 +27,7 @@ window.onmessage = function(msg) {
         return;
     }
     let payload = JSON.parse(msg.data);
-    if(payload.event && payload.event == corsServiceLoad) {
+    if(payload.event && payload.event === "corsServiceLoad") {
         let corsServiceLoadEvent = new Event("corsServiceLoad", {bubbles: true});
         window.dispatchEvent(corsServiceLoadEvent);
     }
