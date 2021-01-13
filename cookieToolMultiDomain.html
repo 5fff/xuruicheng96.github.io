@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Cookie Tool</h2>
+<h3 id = "hostname"></h3>
+
+
+<p>Enter New Cookies Below</p>
+<textarea id="codeInput" rows="45" cols="80">
+crsCookieManager.cookieData = {
+  env: "POC",
+  cookies: [
+    {
+        name: "cookiePref",
+        value: "FUN"
+    },
+    {
+        name: "cookiePref2",
+        value: "FUNddfd"
+    }
+  ]
+};
+  
+crsCookieManager.updateCookie()
+</textarea>
+<br>
+<input type="button" onClick = "executeCode()" value = "Execute">
+
+<script type="text/javascript" src = "https://www.x-r-c.com/corsAccessor.js"></script>
+
+<script>
+  document.getElementById("hostname").innerHTML = "This page's host name is: " + window.location.hostname + ":" + window.location.port;
+   
+  function executeCode() {
+    let code = document.getElementById("codeInput").value;
+    eval(code);
+  }
+
+
+</script>
+</body>
+</html>
+
